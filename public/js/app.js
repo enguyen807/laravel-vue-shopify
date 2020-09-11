@@ -1955,7 +1955,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vee_validate_dist_rules__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vee-validate/dist/rules */ "./node_modules/vee-validate/dist/rules.js");
 /* harmony import */ var vee_validate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vee-validate */ "./node_modules/vee-validate/dist/vee-validate.esm.js");
 
@@ -2150,27 +2151,59 @@ Object(vee_validate__WEBPACK_IMPORTED_MODULE_3__["extend"])('email', _objectSpre
       showPassword: ''
     };
   },
-  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])('account', ['register'])), {}, {
+  methods: {
     handleSubmit: function handleSubmit() {
-      var _this = this;
-
+      var fname = this.fname,
+          lname = this.lname,
+          email = this.email,
+          password = this.password;
+      console.log('Registering User...');
+      this.register({
+        fname: fname,
+        lname: lname,
+        email: email,
+        password: password
+      });
+    },
+    register: function register(_ref) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var fname, lname, email, password;
+        var fname, lname, email, password, query, config, res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                fname = _this.fname, lname = _this.lname, email = _this.email, password = _this.password;
-                console.log('Registering User...');
-                _context.next = 4;
-                return _this.register({
-                  fname: fname,
-                  lname: lname,
-                  email: email,
-                  password: password
-                });
+                fname = _ref.fname, lname = _ref.lname, email = _ref.email, password = _ref.password;
+                console.log('hello');
+                query = {
+                  query: "\n                            mutation customerCreate($input: CustomerCreateInput!) {\n                                customerCreate(input: $input) {\n                                customer {\n                                    id\n                                }\n                                userErrors {\n                                    field\n                                    message\n                                }\n                                }\n                            }\n                        ",
+                  variables: {
+                    input: {
+                      firstName: fname,
+                      lastName: lname,
+                      email: email,
+                      password: password
+                    }
+                  }
+                };
+                console.log("https://all-i-sell-is-water.myshopify.com/api/2020-07/graphql.json");
+                config = {
+                  method: "post",
+                  headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    "X-Shopify-Storefront-Access-Token": '4583bc81511edb8803f633dd1f2b042d'
+                  },
+                  data: query,
+                  url: 'https://cors-anywhere.herokuapp.com/' + 'https://all-i-sell-is-water.myshopify.com/api/graphql'
+                };
+                _context.next = 7;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default()(config);
 
-              case 4:
+              case 7:
+                res = _context.sent;
+                console.log(res);
+                return _context.abrupt("return", res);
+
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -2178,8 +2211,7 @@ Object(vee_validate__WEBPACK_IMPORTED_MODULE_3__["extend"])('email', _objectSpre
         }, _callee);
       }))();
     }
-  }),
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])('account', ['status']))
+  }
 });
 
 /***/ }),

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class Order extends Model
 {
     use SoftDeletes;
 
@@ -15,14 +15,14 @@ class Product extends Model
      * @var array
      */    
     protected $fillable = [
-        'name', 'description', 'price', 'units', 'tag_id'
-    ];
-
-    public function orders() {
-        return $this->hasMany(Order::class);
+        'product_id', 'user_id', 'quantity', 'address'
+    ];   
+    
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function tags() {
-        return $this->hasOne(Tag::class);
+    public function product() {
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }
