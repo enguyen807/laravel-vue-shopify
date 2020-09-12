@@ -4,16 +4,30 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+require("./bootstrap");
 
-window.Vue = require('vue');
-window.Vue.config.productionTip = false
-window.Vue.config.devtools = true
+window.Vue = require("vue");
+window.Vue.config.productionTip = false;
+window.Vue.config.devtools = true;
 
 // Vuex Module
-import Vuex from 'vuex'
-Vue.use(Vuex)
-import store from "./store"
+import Vuex from "vuex";
+import store from "./store";
+
+// VueRouter Module
+import VueRouter from "vue-router";
+
+Vue.use(Vuex);
+Vue.use(VueRouter);
+
+const routes = [
+    { path: "/", component: require("./components/ExampleComponent.vue") },
+];
+
+const router = new VueRouter({
+    mode: "history",
+    routes
+});
 
 /**
  * The following block of code may be used to automatically register your
@@ -26,9 +40,18 @@ import store from "./store"
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('register-component', require('./components/RegisterComponent.vue').default);
-Vue.component('login-component', require('./components/LoginComponent.vue').default);
+Vue.component(
+    "example-component",
+    require("./components/ExampleComponent.vue").default
+);
+Vue.component(
+    "register-component",
+    require("./components/RegisterComponent.vue").default
+);
+Vue.component(
+    "login-component",
+    require("./components/LoginComponent.vue").default
+);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,6 +60,7 @@ Vue.component('login-component', require('./components/LoginComponent.vue').defa
  */
 
 const app = new Vue({
-    el: '#app',
-    store
+    el: "#app",
+    store,
+    router
 });

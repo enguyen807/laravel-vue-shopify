@@ -4,12 +4,13 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Register</div>
-
+            
                     <div class="card-body">
                         <form @submit.prevent="handleSubmit()">
+                            <input type="hidden" name="_token" v-bind:value="csrf">
                             <div class="form-group row">
                                 <label
-                                    for="email"
+                                    for="fname"
                                     class="col-md-4 col-form-label text-md-right"
                                     >First Name</label
                                 >
@@ -38,7 +39,7 @@
                             </div>
                             <div class="form-group row">
                                 <label
-                                    for="email"
+                                    for="lname"
                                     class="col-md-4 col-form-label text-md-right"
                                     >Last Name</label
                                 >
@@ -180,6 +181,7 @@ extend('email', {
 
 export default {
     name: 'RegisterComponent',
+    props: ['csrf'],
     components: {
         ValidationObserver,
         ValidationProvider
