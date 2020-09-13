@@ -26,8 +26,9 @@ async function register(fname, lname, email, password) {
     };
 
     const res = await Axios(config);
-    if (res.data.data.customerCreate.userErrors) {
-        throw new Error("User creation failed");
+    console.log(res)
+    if (res.data.data.customerCreate.userErrors > 0) {
+        throw new Error(res.data.data.customerCreate.userErrors[0].message);
     }
     return res;
 }
@@ -47,8 +48,8 @@ async function login(email, password, rememberMe) {
 
     const res = await Axios(config);
     console.log(res)
-    if (res.data.data.customerCreate.userErrors) {
-        throw new Error("User login failed");
+    if (res.data.data.customerAccessTokenCreate.customerUserErrors.length) {
+        throw new Error(res.data.data.customerAccessTokenCreate.customerUserErrors[0].message);
     }
 
     if (
@@ -60,6 +61,9 @@ async function login(email, password, rememberMe) {
                     .accessToken,
             email: email
         };
+
+        localStorage.setItem("user", JSON.stringify(data))
+        localStorage.removeItem("tempUser");
     }
 
     return res;

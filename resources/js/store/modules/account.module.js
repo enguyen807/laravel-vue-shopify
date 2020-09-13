@@ -50,8 +50,9 @@ const actions = {
             // Commit successful registeration to state
             commit(
                 "registerSuccess",
-                res.data.data.customerCreate.customer.email
+                email
             );
+            return;
         } catch (error) {
             // Commit registeration error to state
             commit("registerFailure", error);
@@ -62,7 +63,7 @@ const actions = {
         commit("loginRequest", { email });
         try {
             const res = await userService.login(email, password);
-
+            console.log(res);
             const user = {
                 token:
                     res.data.data.customerAccessTokenCreate.customerAccessToken
@@ -74,10 +75,12 @@ const actions = {
             };
 
             commit("loginSuccess", { user });
-
+            console.log("Hi from account.module.js");
             window.location.href = "/home";
+            return;
         } catch (error) {
-            // Commit registeration error to state
+            // Commit login error to state
+            console.log(error)
             commit("loginFailure", error);
         }
     }

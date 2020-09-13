@@ -10,6 +10,11 @@ use Config;
 class ApiController extends Controller
 {
     // REFACTOR LATER to use only 1 endpoint
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function createCustomer(Request $request)
     {   
         $formDataQuery = $request->input('query');
@@ -20,9 +25,15 @@ class ApiController extends Controller
             withHeaders(['X-Shopify-Storefront-Access-Token' => $token])->
             post($url, ['query' => $formDataQuery]);
 
-        echo $response->body();
-    }
+        $response->throw();
 
+        return $response->body();
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function createToken(Request $request)
     {   
         $formDataQuery = $request->input('query');
@@ -33,6 +44,9 @@ class ApiController extends Controller
             withHeaders(['X-Shopify-Storefront-Access-Token' => $token])->
             post($url, ['query' => $formDataQuery]);
 
-        echo $response->body();
+        $response->throw();
+        $response->successful();
+
+        return $response->body();
     }    
 }
