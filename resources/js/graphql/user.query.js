@@ -12,8 +12,8 @@ export const userQuery = {
 function register({ fname, lname, email, password }) {
     const formDataQuery = {
         query: `
-          mutation customerCreate($input: CustomerCreateInput!) {
-            customerCreate(input: $input) {
+          mutation {
+            customerCreate(input: { firstName:"${fname}", lastName:"${lname}", email: "${email}", password:"${password}"}) {
               customer {
                 id,
                 email
@@ -24,15 +24,7 @@ function register({ fname, lname, email, password }) {
               }
             }
           }
-        `,
-        variables: {
-            input: {
-                firstName: fname,
-                lastName: lname,
-                email: email,
-                password: password
-            }
-        }
+        `
     };
 
     return formDataQuery;
@@ -41,8 +33,8 @@ function register({ fname, lname, email, password }) {
 function login({email, password}) {
   const formDataQuery = {
     query: `
-      mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
-        customerAccessTokenCreate(input: $input) {
+      mutation {
+        customerAccessTokenCreate(input: { email: "${email}", password: "${password}"}) {
           customerAccessToken {
             accessToken
             expiresAt
@@ -54,13 +46,7 @@ function login({email, password}) {
           }
         }
       }    
-    `,
-    variables: {
-      input: {
-        email: email,
-        password: password
-      }
-    }
+    `
   };
   
   return formDataQuery;

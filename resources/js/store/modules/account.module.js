@@ -4,7 +4,6 @@
  */
 
 import { userService } from "../../services/user.service";
-import router from "vue-router";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -53,13 +52,9 @@ const actions = {
                 "registerSuccess",
                 res.data.data.customerCreate.customer.email
             );
-
         } catch (error) {
-            const errorMsg =
-                res.data.data.customerAccessTokenCreate.customerUserErrors[0]
-                    .message;
             // Commit registeration error to state
-            commit("registerFailure", errorMsg);
+            commit("registerFailure", error);
         }
     },
     async login({ commit }, { email, password }) {
@@ -82,12 +77,8 @@ const actions = {
 
             window.location.href = "/home";
         } catch (error) {
-
-            const errorMsg =
-                res.data.data.customerAccessTokenCreate.customerUserErrors[0]
-                    .message;
             // Commit registeration error to state
-            commit("loginFailure", errorMsg);
+            commit("loginFailure", error);
         }
     }
 };

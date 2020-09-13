@@ -2368,15 +2368,15 @@ Object(vee_validate__WEBPACK_IMPORTED_MODULE_3__["extend"])('email', _objectSpre
               case 0:
                 fname = _this.fname, lname = _this.lname, email = _this.email, password = _this.password;
                 console.log('Registering User...');
-                _context.next = 4;
-                return _this.register({
+
+                _this.register({
                   fname: fname,
                   lname: lname,
                   email: email,
                   password: password
                 });
 
-              case 4:
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -58724,6 +58724,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -58736,19 +58737,12 @@ window.Vue.config.productionTip = false;
 window.Vue.config.devtools = true; // Vuex Module
 
 
- // VueRouter Module
+
+Vue.use(vuex__WEBPACK_IMPORTED_MODULE_0__["default"]); // VueRouter Module
 
 
-Vue.use(vuex__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
-var routes = [{
-  path: "/",
-  component: __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")
-}];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
-  mode: "history",
-  routes: routes
-});
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -58771,7 +58765,7 @@ Vue.component("login-component", __webpack_require__(/*! ./components/LoginCompo
 var app = new Vue({
   el: "#app",
   store: _store__WEBPACK_IMPORTED_MODULE_1__["default"],
-  router: router
+  router: _routes__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
 
 /***/ }),
@@ -59054,15 +59048,7 @@ function register(_ref) {
       email = _ref.email,
       password = _ref.password;
   var formDataQuery = {
-    query: "\n          mutation customerCreate($input: CustomerCreateInput!) {\n            customerCreate(input: $input) {\n              customer {\n                id,\n                email\n              }\n              userErrors {\n                field\n                message\n              }\n            }\n          }\n        ",
-    variables: {
-      input: {
-        firstName: fname,
-        lastName: lname,
-        email: email,
-        password: password
-      }
-    }
+    query: "\n          mutation {\n            customerCreate(input: { firstName:\"".concat(fname, "\", lastName:\"").concat(lname, "\", email: \"").concat(email, "\", password:\"").concat(password, "\"}) {\n              customer {\n                id,\n                email\n              }\n              userErrors {\n                field\n                message\n              }\n            }\n          }\n        ")
   };
   return formDataQuery;
 }
@@ -59071,16 +59057,48 @@ function login(_ref2) {
   var email = _ref2.email,
       password = _ref2.password;
   var formDataQuery = {
-    query: "\n      mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {\n        customerAccessTokenCreate(input: $input) {\n          customerAccessToken {\n            accessToken\n            expiresAt\n          }\n          customerUserErrors {\n            code\n            field\n            message\n          }\n        }\n      }    \n    ",
-    variables: {
-      input: {
-        email: email,
-        password: password
-      }
-    }
+    query: "\n      mutation {\n        customerAccessTokenCreate(input: { email: \"".concat(email, "\", password: \"").concat(password, "\"}) {\n          customerAccessToken {\n            accessToken\n            expiresAt\n          }\n          customerUserErrors {\n            code\n            field\n            message\n          }\n        }\n      }    \n    ")
   };
   return formDataQuery;
 }
+
+/***/ }),
+
+/***/ "./resources/js/routes.js":
+/*!********************************!*\
+  !*** ./resources/js/routes.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/ExampleComponent */ "./resources/js/components/ExampleComponent.vue");
+/* harmony import */ var _components_LoginComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/LoginComponent */ "./resources/js/components/LoginComponent.vue");
+/* harmony import */ var _components_RegisterComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/RegisterComponent */ "./resources/js/components/RegisterComponent.vue");
+
+
+
+
+var routes = [{
+  path: "/",
+  name: "example",
+  component: _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_1__["default"]
+}, {
+  path: "/login",
+  name: "login",
+  component: _components_LoginComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
+}, {
+  path: "/register",
+  name: "register",
+  component: _components_RegisterComponent__WEBPACK_IMPORTED_MODULE_3__["default"]
+}];
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
+  mode: "history",
+  routes: routes
+});
+/* harmony default export */ __webpack_exports__["default"] = (router);
 
 /***/ }),
 
@@ -59139,10 +59157,10 @@ function _register() {
               method: "post",
               headers: {
                 "Content-Type": "application/json",
-                "X-Shopify-Storefront-Access-Token": "4583bc81511edb8803f633dd1f2b042d"
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
               },
               data: query,
-              url: "https://cors-anywhere.herokuapp.com/https://all-i-sell-is-water.myshopify.com/api/graphql"
+              url: "/api/create-customer"
             };
             _context.next = 4;
             return axios__WEBPACK_IMPORTED_MODULE_1___default()(config);
@@ -59150,7 +59168,7 @@ function _register() {
           case 4:
             res = _context.sent;
 
-            if (!res.errors) {
+            if (!res.data.data.customerCreate.userErrors) {
               _context.next = 7;
               break;
             }
@@ -59190,25 +59208,26 @@ function _login() {
               method: "post",
               headers: {
                 "Content-Type": "application/json",
-                "X-Shopify-Storefront-Access-Token": "4583bc81511edb8803f633dd1f2b042d"
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
               },
               data: query,
-              url: "https://cors-anywhere.herokuapp.com/https://all-i-sell-is-water.myshopify.com/api/graphql"
+              url: "/api/create-token"
             };
             _context2.next = 4;
             return axios__WEBPACK_IMPORTED_MODULE_1___default()(config);
 
           case 4:
             res = _context2.sent;
+            console.log(res);
 
-            if (!res.errors) {
-              _context2.next = 7;
+            if (!res.data.data.customerCreate.userErrors) {
+              _context2.next = 8;
               break;
             }
 
             throw new Error("User login failed");
 
-          case 7:
+          case 8:
             if (res.data.data.customerAccessTokenCreate.customerAccessToken.accessToken) {
               data = {
                 token: res.data.data.customerAccessTokenCreate.customerAccessToken.accessToken,
@@ -59218,7 +59237,7 @@ function _login() {
 
             return _context2.abrupt("return", res);
 
-          case 9:
+          case 10:
           case "end":
             return _context2.stop();
         }
@@ -59271,7 +59290,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/user.service */ "./resources/js/services/user.service.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -59282,7 +59300,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * This is the store that will contain all account related vuex operations
  *
  */
-
 
 var user = JSON.parse(localStorage.getItem("user"));
 var state = user ? {
@@ -59330,8 +59347,7 @@ var mutations = {
 var actions = {
   register: function register(_ref, _ref2) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      var commit, fname, lname, email, password, _res, errorMsg;
-
+      var commit, fname, lname, email, password, res;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -59344,31 +59360,29 @@ var actions = {
               return _services_user_service__WEBPACK_IMPORTED_MODULE_1__["userService"].register(fname, lname, email, password);
 
             case 6:
-              _res = _context.sent;
+              res = _context.sent;
               // Commit successful registeration to state
-              commit("registerSuccess", _res.data.data.customerCreate.customer.email);
-              console.log(_res);
-              _context.next = 15;
+              commit("registerSuccess", res.data.data.customerCreate.customer.email);
+              _context.next = 13;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 10:
+              _context.prev = 10;
               _context.t0 = _context["catch"](3);
-              errorMsg = res.data.data.customerAccessTokenCreate.customerUserErrors[0].message; // Commit registeration error to state
+              // Commit registeration error to state
+              commit("registerFailure", _context.t0);
 
-              commit("registerFailure", errorMsg);
-
-            case 15:
+            case 13:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 11]]);
+      }, _callee, null, [[3, 10]]);
     }))();
   },
   login: function login(_ref3, _ref4) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-      var commit, email, password, _res2, _user, errorMsg;
+      var commit, email, password, res, _user;
 
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
         while (1) {
@@ -59385,28 +59399,26 @@ var actions = {
               return _services_user_service__WEBPACK_IMPORTED_MODULE_1__["userService"].login(email, password);
 
             case 6:
-              _res2 = _context2.sent;
+              res = _context2.sent;
               _user = {
-                token: _res2.data.data.customerAccessTokenCreate.customerAccessToken.accessToken,
+                token: res.data.data.customerAccessTokenCreate.customerAccessToken.accessToken,
                 email: email,
-                expiresAt: _res2.data.data.customerAccessTokenCreate.customerAccessToken.expiresAt
+                expiresAt: res.data.data.customerAccessTokenCreate.customerAccessToken.expiresAt
               };
               commit("loginSuccess", {
                 user: _user
               });
               window.location.href = "/home";
-              _context2.next = 17;
+              _context2.next = 15;
               break;
 
             case 12:
               _context2.prev = 12;
               _context2.t0 = _context2["catch"](3);
-              console.log(_context2.t0);
-              errorMsg = res.data.data.customerAccessTokenCreate.customerUserErrors[0].message; // Commit registeration error to state
+              // Commit registeration error to state
+              commit("loginFailure", _context2.t0);
 
-              commit("loginFailure", errorMsg);
-
-            case 17:
+            case 15:
             case "end":
               return _context2.stop();
           }

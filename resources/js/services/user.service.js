@@ -19,15 +19,14 @@ async function register(fname, lname, email, password) {
         method: "post",
         headers: {
             "Content-Type": "application/json",
-            "X-Shopify-Storefront-Access-Token":
-                process.env.MIX_SHOPIFY_STOREFRONT_TOKEN
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
         },
-        data: query,
-        url: process.env.MIX_SHOPIFY_STOREFRONT_URL
+        data:  query,
+        url: "/api/create-customer"
     };
 
     const res = await Axios(config);
-    if (res.errors) {
+    if (res.data.data.customerCreate.userErrors) {
         throw new Error("User creation failed");
     }
     return res;
@@ -40,24 +39,27 @@ async function login(email, password, rememberMe) {
         method: "post",
         headers: {
             "Content-Type": "application/json",
-            "X-Shopify-Storefront-Access-Token":
-                process.env.MIX_SHOPIFY_STOREFRONT_TOKEN
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
         },
         data: query,
-        url: process.env.MIX_SHOPIFY_STOREFRONT_URL
+        url: "/api/create-token"
     };
 
     const res = await Axios(config);
-    if (res.errors) {
+    console.log(res)
+    if (res.data.data.customerCreate.userErrors) {
         throw new Error("User login failed");
     }
 
-    if (res.data.data.customerAccessTokenCreate.customerAccessToken.accessToken) {
-      const data = {
-        token: res.data.data.customerAccessTokenCreate.customerAccessToken.accessToken,
-        email: email
-      }
-
+    if (
+        res.data.data.customerAccessTokenCreate.customerAccessToken.accessToken
+    ) {
+        const data = {
+            token:
+                res.data.data.customerAccessTokenCreate.customerAccessToken
+                    .accessToken,
+            email: email
+        };
     }
 
     return res;

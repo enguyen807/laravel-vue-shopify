@@ -14,20 +14,13 @@ window.Vue.config.devtools = true;
 import Vuex from "vuex";
 import store from "./store";
 
+Vue.use(Vuex);
+
 // VueRouter Module
 import VueRouter from "vue-router";
+import router from "./routes";
 
-Vue.use(Vuex);
 Vue.use(VueRouter);
-
-const routes = [
-    { path: "/", component: require("./components/ExampleComponent.vue") },
-];
-
-const router = new VueRouter({
-    mode: "history",
-    routes
-});
 
 /**
  * The following block of code may be used to automatically register your

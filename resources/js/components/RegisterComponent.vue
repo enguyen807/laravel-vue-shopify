@@ -200,7 +200,7 @@ export default {
 
             console.log('Registering User...')
 
-            await this.register({ fname, lname, email, password})
+            this.register({ fname, lname, email, password})
         }
     },
     computed: {
